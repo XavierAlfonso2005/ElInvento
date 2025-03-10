@@ -1,0 +1,505 @@
+Respuesta1/
+Diagrama de clases:
+
+-----------------------------------
+|            Patient              |
+-----------------------------------
+| - ci: String                    |
+| - firstName: String             |
+| - lastName: String              |
+| - dateOfBirth: LocalDate        |
+| - sex: char                     |
+| - weight: double                |
+| - height: double                |
+| - address: String               |
+| - images: List<Image>           |
+| - diseases: List<Disease>       |
+-----------------------------------
+| + Patient(String, String, String, LocalDate, char, double, double, String) |
+| + getCi(): String               |
+| + setCi(String): void           |
+| + getFirstName(): String        |
+| + setFirstName(String): void    |
+| + getLastName(): String         |
+| + setLastName(String): void     |
+| + getDateOfBirth(): LocalDate   |
+| + setDateOfBirth(LocalDate): void|
+| + getSex(): char                |
+| + setSex(char): void            |
+| + getWeight(): double           |
+| + setWeight(double): void       |
+| + getHeight(): double           |
+| + setHeight(double): void       |
+| + getAddress(): String          |
+| + setAddress(String): void      |
+| + getImages(): List<Image>      |
+| + addImage(Image): void         |
+| + removeImage(String): void     |
+| + getDiseases(): List<Disease>  |
+| + addDisease(Disease): void     |
+| + removeDisease(String): void   |
+| + toString(): String            |
+-----------------------------------
+
+-----------------------------------
+|            Image                |
+-----------------------------------
+| - fileName: String              |
+| - dateTaken: LocalDate          |
+| - imageType: String             |
+| - doctorComments: String        |
+-----------------------------------
+| + Image(String, LocalDate, String, String) |
+| + getFileName(): String         |
+| + setFileName(String): void     |
+| + getDateTaken(): LocalDate     |
+| + setDateTaken(LocalDate): void |
+| + getImageType(): String        |
+| + setImageType(String): void    |
+| + getDoctorComments(): String   |
+| + setDoctorComments(String): void|
+| + toString(): String            |
+-----------------------------------
+
+-----------------------------------
+|           Disease               |
+-----------------------------------
+| - name: String                  |
+| - dateDiagnosed: LocalDate      |
+| - treatment: String             |
+-----------------------------------
+| + Disease(String, LocalDate, String) |
+| + getName(): String             |
+| + setName(String): void         |
+| + getDateDiagnosed(): LocalDate |
+| + setDateDiagnosed(LocalDate): void|
+| + getTreatment(): String        |
+| + setTreatment(String): void    |
+| + toString(): String            |
+-----------------------------------
+
+-----------------------------------
+|         HospitalRegistry        |
+-----------------------------------
+| - patients: Map<String, Patient>|
+-----------------------------------
+| + HospitalRegistry()            |
+| + addPatient(Patient): void     |
+| + removePatient(String): void   |
+| + updatePatient(Patient): void  |
+| + findPatient(String): Patient  |
+| + getPatientsWithGreatestHeight(): List<String> |
+| + countFemalePatientsWithDengue(): int          |
+| + getPatientsOrderedByName(): List<Patient>       |
+| + getPatientsOrderedByWeightDesc(): List<Patient>   |
+| + toString(): String                                |
+-----------------------------------
+Respuesta2/
+
+public class Main {
+    public static void main(String[] args) {
+        // Crea una instancia de registro del hospital
+        HospitalRegistry registry = new HospitalRegistry();
+
+        // Agrega pacientes
+        Patient patient1 = new Patient("CI001", "John", "Doe",
+                LocalDate.of(1990, 1, 1), 'M', 70.5, 175.0, "123 Main St");
+        Patient patient2 = new Patient("CI002", "Jane", "Smith",
+                LocalDate.of(1985, 5, 15), 'F', 60.0, 165.0, "456 Elm St");
+        Patient patient3 = new Patient("CI003", "Alice", "Johnson",
+                LocalDate.of(1992, 8, 20), 'F', 55.0, 165.0, "789 Oak St");
+
+        registry.addPatient(patient1);
+        registry.addPatient(patient2);
+        registry.addPatient(patient3);
+
+        // Agrega la imagen del paciente 1
+        Image image1 = new Image("img001.jpg", LocalDate.of(2025, 2, 10), "X-Ray", "Normal");
+        Image image2 = new Image("img002.jpg", LocalDate.of(2025, 3, 5), "MRI", "Follow-up required");
+        patient1.addImage(image1);
+        patient1.addImage(image2);
+
+        // Agrega enfermedades del paciente 2
+        Disease disease1 = new Disease("Dengue", LocalDate.of(2024, 7, 20), "Rest and hydration");
+        Disease disease2 = new Disease("Flu", LocalDate.of(2023, 11, 2), "Antiviral medication");
+        patient2.addDisease(disease1);
+        patient2.addDisease(disease2);
+
+        // Operación 1: Busca al paciente por el CI
+        String searchCI = "CI001";
+        Patient foundPatient = registry.findPatient(searchCI);
+        if (foundPatient != null) {
+            System.out.println("Patient found: " + foundPatient.getFirstName() + " " +
+                    foundPatient.getLastName());
+            System.out.println("Sex: " + foundPatient.getSex());
+            System.out.println("Weight: " + foundPatient.getWeight());
+            System.out.println("Height: " + foundPatient.getHeight());
+            System.out.println("Number of Images: " + foundPatient.getImages().size());
+            System.out.println("Number of Diseases: " + foundPatient.getDiseases().size());
+        } else {
+            System.out.println("Patient with CI " + searchCI + " not found.");
+        }
+
+        // Operación 2: Da el CI de los pacientes con mayor mayor altura
+        List<String> tallestPatients = registry.getPatientsWithGreatestHeight();
+        System.out.println("Patients with the greatest height (CI): " + tallestPatients);
+
+        // Operación 3: Cuenta las pacientes con dengue
+        int dengueCount = registry.countFemalePatientsWithDengue();
+        System.out.println("Number of female patients who have suffered from dengue: " + dengueCount);
+
+        // Operación 4a: Ordena los pacientes por orden alfabético
+        List<Patient> patientsByName = registry.getPatientsOrderedByName();
+        System.out.println("Patients ordered by name:");
+        for (Patient p : patientsByName) {
+            System.out.println(p.getCi() + " - " + p.getFirstName() + " " + p.getLastName() +
+                    ", Weight: " + p.getWeight() + ", Height: " + p.getHeight());
+        }
+
+        // Operación 4b: Ordena los pacientes por peso (de mayor a menor)
+        List<Patient> patientsByWeight = registry.getPatientsOrderedByWeightDesc();
+        System.out.println("Patients ordered by weight (descending):");
+        for (Patient p : patientsByWeight) {
+            System.out.println(p.getCi() + " - " + p.getFirstName() + " " + p.getLastName() +
+                    ", Weight: " + p.getWeight() + ", Height: " + p.getHeight());
+        }
+
+        // Operation 5: Example of removing a patient
+        registry.removePatient("CI003");
+        System.out.println("After removing patient with CI003, the registry is:");
+        System.out.println(registry);
+    }
+}
+
+// Patient class definition
+class Patient {
+    private String ci;
+    private String firstName;
+    private String lastName;
+    private LocalDate dateOfBirth;
+    private char sex;
+    private double weight;
+    private double height;
+    private String address;
+    private List<Image> images;
+    private List<Disease> diseases;
+
+    public Patient(String ci, String firstName, String lastName, LocalDate dateOfBirth, char sex,
+                   double weight, double height, String address) {
+        this.ci = ci;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.sex = sex;
+        this.weight = weight;
+        this.height = height;
+        this.address = address;
+        this.images = new ArrayList<>();
+        this.diseases = new ArrayList<>();
+    }
+
+    // Getters and setters
+    public String getCi() {
+        return ci;
+    }
+    public void setCi(String ci) {
+        this.ci = ci;
+    }
+    public String getFirstName() {
+        return firstName;
+    }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+    public char getSex() {
+        return sex;
+    }
+    public void setSex(char sex) {
+        this.sex = sex;
+    }
+    public double getWeight() {
+        return weight;
+    }
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+    public double getHeight() {
+        return height;
+    }
+    public void setHeight(double height) {
+        this.height = height;
+    }
+    public String getAddress() {
+        return address;
+    }
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    public List<Image> getImages() {
+        return images;
+    }
+    public List<Disease> getDiseases() {
+        return diseases;
+    }
+
+    // Add and remove image methods
+    public void addImage(Image image) {
+        images.add(image);
+    }
+    public void removeImage(String fileName) {
+        images.removeIf(img -> img.getFileName().equals(fileName));
+    }
+
+    // Add and remove disease methods
+    public void addDisease(Disease disease) {
+        diseases.add(disease);
+    }
+    public void removeDisease(String diseaseName) {
+        diseases.removeIf(disease -> disease.getName().equalsIgnoreCase(diseaseName));
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "ci='" + ci + '\'' +
+                ", name='" + firstName + " " + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", sex=" + sex +
+                ", weight=" + weight +
+                ", height=" + height +
+                ", address='" + address + '\'' +
+                ", images=" + images +
+                ", diseases=" + diseases +
+                '}';
+    }
+}
+
+// Image class definition
+class Image {
+    private String fileName;
+    private LocalDate dateTaken;
+    private String imageType;
+    private String doctorComments;
+
+    public Image(String fileName, LocalDate dateTaken, String imageType, String doctorComments) {
+        this.fileName = fileName;
+        this.dateTaken = dateTaken;
+        this.imageType = imageType;
+        this.doctorComments = doctorComments;
+    }
+
+    // Getters and setters
+    public String getFileName() {
+        return fileName;
+    }
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+    public LocalDate getDateTaken() {
+        return dateTaken;
+    }
+    public void setDateTaken(LocalDate dateTaken) {
+        this.dateTaken = dateTaken;
+    }
+    public String getImageType() {
+        return imageType;
+    }
+    public void setImageType(String imageType) {
+        this.imageType = imageType;
+    }
+    public String getDoctorComments() {
+        return doctorComments;
+    }
+    public void setDoctorComments(String doctorComments) {
+        this.doctorComments = doctorComments;
+    }
+
+    @Override
+    public String toString() {
+        return "Image{" +
+                "fileName='" + fileName + '\'' +
+                ", dateTaken=" + dateTaken +
+                ", imageType='" + imageType + '\'' +
+                ", doctorComments='" + doctorComments + '\'' +
+                '}';
+    }
+}
+
+// Disease class definition
+class Disease {
+    private String name;
+    private LocalDate dateDiagnosed;
+    private String treatment;
+
+    public Disease(String name, LocalDate dateDiagnosed, String treatment) {
+        this.name = name;
+        this.dateDiagnosed = dateDiagnosed;
+        this.treatment = treatment;
+    }
+
+    // Getters and setters
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public LocalDate getDateDiagnosed() {
+        return dateDiagnosed;
+    }
+    public void setDateDiagnosed(LocalDate dateDiagnosed) {
+        this.dateDiagnosed = dateDiagnosed;
+    }
+    public String getTreatment() {
+        return treatment;
+    }
+    public void setTreatment(String treatment) {
+        this.treatment = treatment;
+    }
+
+    @Override
+    public String toString() {
+        return "Disease{" +
+                "name='" + name + '\'' +
+                ", dateDiagnosed=" + dateDiagnosed +
+                ", treatment='" + treatment + '\'' +
+                '}';
+    }
+}
+
+// HospitalRegistry class definition
+class HospitalRegistry {
+    private Map<String, Patient> patients;
+
+    public HospitalRegistry() {
+        patients = new HashMap<>();
+    }
+
+    // Add a new patient
+    public void addPatient(Patient patient) {
+        patients.put(patient.getCi(), patient);
+    }
+
+    // Remove an existing patient by CI
+    public void removePatient(String ci) {
+        patients.remove(ci);
+    }
+
+    // Update (or add) a patient record
+    public void updatePatient(Patient patient) {
+        patients.put(patient.getCi(), patient);
+    }
+
+    // Find a patient by CI
+    public Patient findPatient(String ci) {
+        return patients.get(ci);
+    }
+
+    // Operation 2: Get the CI(s) of the patient(s) with the greatest height
+    public List<String> getPatientsWithGreatestHeight() {
+        List<String> result = new ArrayList<>();
+        double maxHeight = 0;
+        for (Patient patient : patients.values()) {
+            if (patient.getHeight() > maxHeight) {
+                maxHeight = patient.getHeight();
+            }
+        }
+        for (Patient patient : patients.values()) {
+            if (patient.getHeight() == maxHeight) {
+                result.add(patient.getCi());
+            }
+        }
+        return result;
+    }
+
+    // Operation 3: Count the number of female patients who have suffered from dengue
+    public int countFemalePatientsWithDengue() {
+        int count = 0;
+        for (Patient patient : patients.values()) {
+            if (Character.toUpperCase(patient.getSex()) == 'F') {
+                for (Disease disease : patient.getDiseases()) {
+                    if (disease.getName().equalsIgnoreCase("dengue")) {
+                        count++;
+                        break;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+    // Operation 4a: Get patients ordered by name (alphabetically)
+    public List<Patient> getPatientsOrderedByName() {
+        List<Patient> patientList = new ArrayList<>(patients.values());
+        patientList.sort(Comparator.comparing(Patient::getFirstName)
+                .thenComparing(Patient::getLastName));
+        return patientList;
+    }
+
+    // Operation 4b: Get patients ordered by weight (from highest to lowest)
+    public List<Patient> getPatientsOrderedByWeightDesc() {
+        List<Patient> patientList = new ArrayList<>(patients.values());
+        patientList.sort(Comparator.comparingDouble(Patient::getWeight).reversed());
+        return patientList;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Patient patient : patients.values()) {
+            sb.append(patient).append("\n");
+        }
+        return sb.toString();
+    }
+}
+
+Explicación
+
+1. Diagrama UML (Bloque de comentarios):
+El diagrama muestra cuatro clases:
+
+
+
+Patient (con atributos como CI, nombre, fecha de nacimiento, sexo, peso, altura, dirección y listas para imágenes y enfermedades)
+
+Image (con un nombre de archivo único, fecha en que fue tomada, tipo de imagen y comentarios del doctor)
+
+Disease (con el nombre de la enfermedad, fecha de diagnóstico y tratamiento)
+
+HospitalRegistry (que mantiene un mapa de pacientes indexado por CI y proporciona métodos para operaciones CRUD y las consultas requeridas)
+
+
+2. Implementación de las Clases:
+Cada clase se implementa con constructores apropiados, getters/setters y métodos auxiliares (por ejemplo, para agregar o eliminar imágenes y enfermedades).
+
+
+3. Método Principal:
+El método principal demuestra:
+
+
+
+Agregar pacientes y asociarles imágenes y enfermedades.
+
+Buscar un paciente por CI.
+
+Obtener el CI del (o de los) paciente(s) más alto(s).
+
+Contar las pacientes femeninas que han padecido dengue.
+
+Listar pacientes ordenados por nombre y por peso de forma descendente.
+
+Eliminar un paciente del registro.
+
+
