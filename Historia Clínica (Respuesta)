@@ -1,101 +1,99 @@
 Respuesta1/
-Diagrama de clases:
+Diagrama de clases: (Intente ponerle imagen pero no me dejo)
 
------------------------------------
-|            Patient              |
------------------------------------
-| - ci: String                    |
-| - firstName: String             |
-| - lastName: String              |
-| - dateOfBirth: LocalDate        |
-| - sex: char                     |
-| - weight: double                |
-| - height: double                |
-| - address: String               |
-| - images: List<Image>           |
-| - diseases: List<Disease>       |
------------------------------------
-| + Patient(String, String, String, LocalDate, char, double, double, String) |
-| + getCi(): String               |
-| + setCi(String): void           |
-| + getFirstName(): String        |
-| + setFirstName(String): void    |
-| + getLastName(): String         |
-| + setLastName(String): void     |
-| + getDateOfBirth(): LocalDate   |
-| + setDateOfBirth(LocalDate): void|
-| + getSex(): char                |
-| + setSex(char): void            |
-| + getWeight(): double           |
-| + setWeight(double): void       |
-| + getHeight(): double           |
-| + setHeight(double): void       |
-| + getAddress(): String          |
-| + setAddress(String): void      |
-| + getImages(): List<Image>      |
-| + addImage(Image): void         |
-| + removeImage(String): void     |
-| + getDiseases(): List<Disease>  |
-| + addDisease(Disease): void     |
-| + removeDisease(String): void   |
-| + toString(): String            |
------------------------------------
+@startuml
+class Patient {
+    - ci: String
+    - firstName: String
+    - lastName: String
+    - dateOfBirth: LocalDate
+    - sex: char
+    - weight: double
+    - height: double
+    - address: String
+    - images: List<Image>
+    - diseases: List<Disease>
+    
+    + Patient(String, String, String, LocalDate, char, double, double, String)
+    + getCi(): String
+    + setCi(String): void
+    + getFirstName(): String
+    + setFirstName(String): void
+    + getLastName(): String
+    + setLastName(String): void
+    + getDateOfBirth(): LocalDate
+    + setDateOfBirth(LocalDate): void
+    + getSex(): char
+    + setSex(char): void
+    + getWeight(): double
+    + setWeight(double): void
+    + getHeight(): double
+    + setHeight(double): void
+    + getAddress(): String
+    + setAddress(String): void
+    + getImages(): List<Image>
+    + addImage(Image): void
+    + removeImage(String): void
+    + getDiseases(): List<Disease>
+    + addDisease(Disease): void
+    + removeDisease(String): void
+    + toString(): String
+}
 
------------------------------------
-|            Image                |
------------------------------------
-| - fileName: String              |
-| - dateTaken: LocalDate          |
-| - imageType: String             |
-| - doctorComments: String        |
------------------------------------
-| + Image(String, LocalDate, String, String) |
-| + getFileName(): String         |
-| + setFileName(String): void     |
-| + getDateTaken(): LocalDate     |
-| + setDateTaken(LocalDate): void |
-| + getImageType(): String        |
-| + setImageType(String): void    |
-| + getDoctorComments(): String   |
-| + setDoctorComments(String): void|
-| + toString(): String            |
------------------------------------
+class Image {
+    - fileName: String
+    - dateTaken: LocalDate
+    - imageType: String
+    - doctorComments: String
+    
+    + Image(String, LocalDate, String, String)
+    + getFileName(): String
+    + setFileName(String): void
+    + getDateTaken(): LocalDate
+    + setDateTaken(LocalDate): void
+    + getImageType(): String
+    + setImageType(String): void
+    + getDoctorComments(): String
+    + setDoctorComments(String): void
+    + toString(): String
+}
 
------------------------------------
-|           Disease               |
------------------------------------
-| - name: String                  |
-| - dateDiagnosed: LocalDate      |
-| - treatment: String             |
------------------------------------
-| + Disease(String, LocalDate, String) |
-| + getName(): String             |
-| + setName(String): void         |
-| + getDateDiagnosed(): LocalDate |
-| + setDateDiagnosed(LocalDate): void|
-| + getTreatment(): String        |
-| + setTreatment(String): void    |
-| + toString(): String            |
------------------------------------
+class Disease {
+    - name: String
+    - dateDiagnosed: LocalDate
+    - treatment: String
+    
+    + Disease(String, LocalDate, String)
+    + getName(): String
+    + setName(String): void
+    + getDateDiagnosed(): LocalDate
+    + setDateDiagnosed(LocalDate): void
+    + getTreatment(): String
+    + setTreatment(String): void
+    + toString(): String
+}
 
------------------------------------
-|         HospitalRegistry        |
------------------------------------
-| - patients: Map<String, Patient>|
------------------------------------
-| + HospitalRegistry()            |
-| + addPatient(Patient): void     |
-| + removePatient(String): void   |
-| + updatePatient(Patient): void  |
-| + findPatient(String): Patient  |
-| + getPatientsWithGreatestHeight(): List<String> |
-| + countFemalePatientsWithDengue(): int          |
-| + getPatientsOrderedByName(): List<Patient>       |
-| + getPatientsOrderedByWeightDesc(): List<Patient>   |
-| + toString(): String                                |
------------------------------------
+class HospitalRegistry {
+    - patients: Map<String, Patient>
+    
+    + HospitalRegistry()
+    + addPatient(Patient): void
+    + removePatient(String): void
+    + updatePatient(Patient): void
+    + findPatient(String): Patient
+    + getPatientsWithGreatestHeight(): List<String>
+    + countFemalePatientsWithDengue(): int
+    + getPatientsOrderedByName(): List<Patient>
+    + getPatientsOrderedByWeightDesc(): List<Patient>
+    + toString(): String
+}
+
+Patient "1" *-- "many" Image
+Patient "1" *-- "many" Disease
+HospitalRegistry "1" *-- "many" Patient
+@enduml
+
 Respuesta2/
-
 public class Main {
     public static void main(String[] args) {
         // Crea una instancia de registro del hospital
